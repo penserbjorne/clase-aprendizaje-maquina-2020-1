@@ -10,6 +10,7 @@ function crearLetras(){
   }else {
     eliminarLetras();
     tableCreate(nVariantes, nLetras);
+    crearX(nLetras, nVariantes);
     crearY(nLetras, nVariantes);
   }
 }
@@ -18,6 +19,12 @@ function crearLetras(){
 function eliminarLetras(){
   var main = document.getElementById('main');
   main.innerHTML = '';
+
+  var outX = document.getElementById('outX');
+  outX.innerHTML = '';
+
+  var outY = document.getElementById('outY');
+  outY.innerHTML = '';
 }
 
 // Crea la tabla que contendra las letras
@@ -38,7 +45,7 @@ function tableCreate(filas, columnas){
 
           // Creamos la malla para la letra correspondiente
           // y la metemos a la celda
-          var malla = crearMalla();
+          var malla = crearMalla(columnas, filas);
           td.appendChild(malla);
         }
     }
@@ -49,7 +56,7 @@ function tableCreate(filas, columnas){
 }
 
 // Crea la malla para una letra
-function crearMalla(){
+function crearMalla(nLetras, nVariantes){
   var tbl  = document.createElement('table');
   tbl.style.border = '1px solid black';
 
@@ -68,7 +75,7 @@ function crearMalla(){
 
         // Le asignamos una función para cuando se interactua con él
         check.addEventListener("change", function (){
-            cambioCheck(this);
+            crearX(nLetras, nVariantes);
           }
         );
         // Añadimos el check en la celda
@@ -79,8 +86,42 @@ function crearMalla(){
   return tbl;
 }
 
-function cambioCheck(me){
+// Creamos el contenido de la salida Y, las etiquetas
+function crearX(nLetras, nVariantes){
   //alert(me.checked);
+  var filas = Number(nLetras * nVariantes);
+  var columnas = nLetras;
+
+  // Hay que recorrer la mtriz de mallas
+  var checks = document.getElementById('main').getElementsByTagName('input');
+
+  // Creamos la entrada
+  var str = 'X = [';
+
+  // Esta es filas = nLetras*nVariantes
+  // y columnas = 8x8 = 64
+  var cont = 0;
+  for(var i = 0; i < checks.length; i++){
+    if(cont == 0){
+      str += '<br>['
+    }
+    if(checks[i].checked){
+      str += '1,';
+    } else {
+      str += '0,';
+    }
+    cont++;
+    if(cont >= 64){
+      cont = 0;
+      str = str.slice(0, -1);
+      str += '],'
+    }
+  }
+
+  str = str.slice(0, -1);
+  str += '<br>]';
+
+  document.getElementById('outX').innerHTML = str;
 }
 
 // Creamos el contenido de la salida Y, las etiquetas
@@ -107,6 +148,7 @@ function crearY(nLetras, nVariantes){
       str += '],'
     }
   }
+
   str = str.slice(0, -1);
   str += '<br>]';
 

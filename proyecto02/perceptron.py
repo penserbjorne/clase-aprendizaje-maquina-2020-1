@@ -18,11 +18,13 @@ Original file is located at
 import numpy as np
 from math import exp
 
+# Clase para crear la red neuronal
+
 class FullyConnectedLayer:
     """
         Capa de perceptrones
         transfer_function: funcion de transferencia, debe devolver un solo numero
-        size: tamaño de la capa (# de neuronas, # de entradas)
+        size: tamaño de la capa (# de neuronas o clases, # de entradas)
         w: una matriz de pesos
     """
     def __init__(self, transfer_function, size=(1,1), w=None):
@@ -35,9 +37,15 @@ class FullyConnectedLayer:
         self.b = np.ones(self.neurons)
         self.tf = np.vectorize(transfer_function, otypes=[float])
 
+    """
+        eval
+        inputs: # de entradas
+    """
     def eval(self, inputs):
         n = np.dot(self.w, inputs) + self.b
         return self.tf(n)
+
+# Funciones de activación
 
 class TransferFunctions:
 
@@ -80,13 +88,15 @@ class TransferFunctions:
             z = exp(2*x)
             (z - 1)/(z + 1)
 
+# Entrenador de la red neuronal
+
 class NeuralNetworkTrainer:
     def __init__(self, net, X, Y, train_ratio=0.7, threshold=0.01, epochs=10):
-        self.net = net
-        self.data = {}
-        self._data_divide(np.asfarray(X), np.asfarray(Y), train_ratio)
+        self.net = net  # Red
+        self.data = {}  # Datos en la red
+        self._data_divide(np.asfarray(X), np.asfarray(Y), train_ratio)  # Divide el set de datos en entretenamiento y test
         self.error = 1
-        self.data_ratio=train_ratio
+        self.data_ratio = train_ratio
         self.threshold = threshold # Umbral de error
         self.epochs = epochs
 
@@ -96,21 +106,29 @@ class NeuralNetworkTrainer:
         self.data["train_Y"] = Y[0:idx]
         self.data["test_X"]  = X[idx:]
         self.data["test_Y"]  = Y[idx:]
+        print("Datos de entrada para entrenamiento:")
         print(self.data["train_X"])
+        print("Datos de salida para entrenamiento:")
         print(self.data["train_Y"])
 
 
+    """
+    train: Entrena la red con el set de pruebas
+    """
     def train(self):
         epochs = 0
         while self.error > self.threshold and self.epochs > epochs:
             net_error = [] # Error de toda la red durante el epoch
+
+            # Evaluación con la regla del perceptron
             for p, t in zip(self.data["train_X"], self.data["train_Y"]):
                 a = self.net.eval(p)
                 error = t - a
 
+                # Guardamos el error de la red
                 net_error.append(error)
 
-# Ajuste de pesos y bias
+                # Ajuste de pesos y bias
                 self.net.w += np.dot(np.reshape(error, (1, error.size)).T, np.reshape(p, (1, p.size)))
                 self.net.b += error
 
@@ -127,6 +145,10 @@ class NeuralNetworkTrainer:
         - (float): el error promedio
     """
     def test(self):
+        print("Datos de entrada para test:")
+        print(self.data["test_X"])
+        print("Datos de salida para test:")
+        print(self.data["test_Y"])
         a, error = [], []
         for p, t in zip(self.data["test_X"], self.data["test_Y"]):
             o = net.eval(p)
@@ -159,12 +181,83 @@ Y= [
     [0, 1, 1],
     [1, 1, 0]]
 
-net = FullyConnectedLayer(TransferFunctions.hardlim, size=(3, 2))
+# Entradas para las letras propuestas en la documentacióón ejemplo
+X = [
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0],
+[1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,0,0,1,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1],
+[1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,0,1,1,0,0,0,0,0,0,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,0],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,1,0,0,0,0,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,0,1,1,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1],
+[1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,0],
+[1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0],
+[1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
+[0,0,1,1,1,1,0,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,1,1,1,1,0,0],
+[1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1],
+[1,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0],
+[1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],
+[1,0,0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,1,1,0,0,1,1,1,1,0,1,0,0,1,0,1,1,0,1,1,1,1,0,1,1,0,0,1,1,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1],
+[1,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0],
+[1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0],
+[1,1,1,1,1,0,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,1,1,1,1,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,1,1,1,1,0,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,0,0,1,0,0,0,0,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1,0,0,1,0,0,0,0,1,1,1,1,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,1,0,0,0,0,1,0,0,1,1,0,0,1,1,0,0,1,0,1,1,0,1,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+]
 
-trainer = NeuralNetworkTrainer(net, X, Y, train_ratio=0.5, threshold=0.0, epochs=10000)
+# Salidas para las letras propuestas en la documentacióón ejemplo
+Y = [
+[1,0,0,0,0,0,0,0],
+[0,1,0,0,0,0,0,0],
+[0,0,1,0,0,0,0,0],
+[0,0,0,1,0,0,0,0],
+[0,0,0,0,1,0,0,0],
+[0,0,0,0,0,1,0,0],
+[0,0,0,0,0,0,1,0],
+[0,0,0,0,0,0,0,1],
+[1,0,0,0,0,0,0,0],
+[0,1,0,0,0,0,0,0],
+[0,0,1,0,0,0,0,0],
+[0,0,0,1,0,0,0,0],
+[0,0,0,0,1,0,0,0],
+[0,0,0,0,0,1,0,0],
+[0,0,0,0,0,0,1,0],
+[0,0,0,0,0,0,0,1],
+[1,0,0,0,0,0,0,0],
+[0,1,0,0,0,0,0,0],
+[0,0,1,0,0,0,0,0],
+[0,0,0,1,0,0,0,0],
+[0,0,0,0,1,0,0,0],
+[0,0,0,0,0,1,0,0],
+[0,0,0,0,0,0,1,0],
+[0,0,0,0,0,0,0,1]
+]
 
-trainer.train()
+# Creamos una red neuronal con funcióón de activación hardlim, con 8 neuronas (son 8 clases) y 64 entradas (el vector es un flat de una matrix de 8x8)
+print("Creamos una red neuronal con funcióón de activación hardlim, con 8 neuronas (son 8 clases) y 64 entradas (el vector es un flat de una matrix de 8x8)")
+net = FullyConnectedLayer(TransferFunctions.hardlim, size=(8, 64))
 
-trainer.test()
+# Creamos el entrenador, utilizando dos terceras partes de los datos
+print("Creamos el entrenador, utilizando dos terceras partes de los datos, un treshold de 0.1 y 10000 epocas")
+trainer = NeuralNetworkTrainer(net, X, Y, train_ratio=(2/3), threshold=0.1, epochs=10000)
 
-net.w
+# Entrenamos
+print("Entrenamos")
+print(trainer.train())
+
+# Probamos con el set de prueba
+print("Probamos con el set de prueba, los elementos con 1 en el vector es la clase a la que corresponde, y desplegamos el error promedio de la red")
+resultados, error = trainer.test()
+
+print("Resultados:")
+print(resultados)
+print("Error promedio de la red:")
+print(error)
+
+print ("Pesos de la red:")
+print(net.w)
+

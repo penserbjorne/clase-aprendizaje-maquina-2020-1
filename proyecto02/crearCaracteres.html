@@ -13,8 +13,29 @@
 </head>
 
 <body>
+
   <script src="js/scripts.js"></script>
+
+  <h1> Reconocedor de letras </h1>
+
+  <div id="intrucciones">
+    <h2> Instrucciones </h2>
+    <li>
+      <ul>La siguiente interfaz permite generar las matrices X (de entrada) y Y (de salida) para nuestra red neuronal.</ul>
+      <ul>Recuerda copiarlas y pegarlas al script de python en la sección correspondiente.</ul>
+      <ul>Las letras se deben ingresar de manera horizontal.</ul>
+      <ul>Las variantes de las letras se añaden de manera vertical.</ul>
+      <ul>Suponiendo que las siguientes tres lineas tienen tipografia distinta, tendriamos 8 letras con tres variantes, deberian ingresarse de la siguiente manera en las mallas.</ul>
+      <li>
+        <ul>PSAEOMCL</ul>
+        <ul>PSAEOMCL</ul>
+        <ul>PSAEOMCL</ul>
+      </li>
+    </li>
+  </div>
+
   <div id="control">
+    <h2> Control </h2>
     <table>
       <tr>
         <td>Número de letras:</td><td><input type="text" id="nLetras" value="8"></td>
@@ -22,14 +43,19 @@
       <tr>
         <td>Número de variantes por letra:</td><td><input type="text" id="nVariantes" value="3"></td>
       </tr>
-  </table>
-    <br>
-    <br>
+    </table>
     <button onclick="crearLetras()">Generar</button>
     <button onclick="eliminarLetras()">Eliminar letras</button>
   </div>
-  <div id="main">
+  <div id="letrasYsalidas">
+    <h2> Letras </h2>
+    <div id="main"></div>
 
-  </div>
+    <h2> Vector de entrada X </h2>
+    <div id="outX"></div>
+
+    <h2> Vector de salida Y </h2>
+    <div id="outY"></div>
+  <div>
 </body>
 </html>

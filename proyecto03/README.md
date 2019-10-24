@@ -23,6 +23,10 @@ Estas redes se componen de una capa de entrada, capas intermedias y una capa de 
 
 ### Aprendizaje basado en el Gradiente
 
+Diseñar y entrenar una red neuronal no es demasiado distinto a entrenar cualquier otro modelo de aprendizaje máquina con el gradiente descendente.
+
+La diferencia entre los modelos lineales y las redes neuronales es que la no linealidad de las redes provoca que las funciones de perdidas más interesantes se vuelvan no convexas.
+
 
 
 ## Desarrollo

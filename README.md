@@ -11,3 +11,4 @@ Alumnos:
 
 - 01: ID3
 - 02: Reconocedor de letras
+- 03: Redes Neuronales Multicapa utilizando el algoritmo backpropagation

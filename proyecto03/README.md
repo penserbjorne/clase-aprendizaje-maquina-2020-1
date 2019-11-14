@@ -52,9 +52,14 @@ lenguaje de programación Julia y utilizando el paquete de IJulia.
 
 Pesos, bias finales, graficas
 
+![backpropagation.gif](backpropagation.gif)
+
+![ej2.gif](ej2.gif)
+
 ## Conclusiones
 
-- __Aguilar Enriquez Paul Sebastian:__ __Cabrera Lopez Oscar Emilio:__ -
+- __Aguilar Enriquez Paul Sebastian:__ -
+- __Cabrera Lopez Oscar Emilio:__ -
 
 ## Bibliografia
 

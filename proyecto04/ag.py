@@ -30,7 +30,7 @@ numGenes = 16
 ## Metodo de selección: Ruleta
 ## Cruza: De 2 puntos , crossover_rate(pc) = 80%
 crossover_points = 2
-crossover_rate = 8
+crossover_rate = .8
 ## Mutación: -, mutation_rate(pm) = 1%
 mutation_rate = .01
 ## Tamaño de población: 50

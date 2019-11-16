@@ -1,6 +1,4 @@
-# Práctica 04
-
-__Algoritmo Genético__
+# Práctica 04, Algoritmo Genético
 
 - Aguilar Enriquez, Paul Sebastian
 - Cabrera Lopez, Oscar Emilio
@@ -11,6 +9,8 @@ El alumno programará un algoritmo genético con la finalidad de maximizar una
 función, el alumno conocerá los efectos de la tasa de cruza y mutación.
 
 ## Introducción
+
+Aquí va la teoría que se pondrá en el transcurso del puente :)
 
 ## Desarrollo
 
@@ -25,6 +25,12 @@ con el notebook `ag.ipynb`
 
 Para el desarrollo del programa se utilizo la secuencia de pasos y parámetros
 realizados en el ejercicio visto en clase con algunas adecuaciones.
+
+Durante el desarrollo pudimos observar que al cruzar y mutar individuos estos
+podían resultar con valores que excedían los establecidos como la regla de
+inversión máxima de 10 millones de unidades, por lo cual se tuvieron que añadir
+algunas validaciones entre procesos para evitar que estos individuos causaran
+problemas en el código.
 
 Los **parámetros** utilizados fueron:
 
@@ -112,8 +118,33 @@ unidades a invertir.
 
 ## Conclusiones
 
-- __Aguilar Enriquez Paul Sebastian:__ - 
-- __Cabrera Lopez Oscar Emilio:__ -
+### Aguilar Enriquez Paul Sebastian
+
+La selección de valores adecuados para los parámetros de cruza y mutación son importantes. Como vimos en los resultados el rendimiento del algoritmo varia
+bastante función de estos parámetros.
+
+En el caso de la cruza se observo que con una tasa del 50% el algoritmo lograba
+maximizar la función al final pero con un rendimiento no tan bueno, y en el caso
+del 25% no se logro maximizar la función y se obtuvo un rendimiento nada bueno.
+En ambos casos la cantidad de individuos que se tuvieron que reemplazar porque
+excedían el limite de inversión también se vio afectado de manera proporcional.
+
+En el caso de la mutación podemos ver que conforme esta incrementa aumenta
+también el ruido en la población. Con una tasa de 10% los individuos
+comienzan a variar de forma constante incrementando las sustituciones, y con una
+tasa de 25% las variaciones ya son demasiadas, a tal punto de que es necesario
+realizar sustituciones grandes en cada generación.
+
+Con menor posibilidad de cruza entre individuos más variedad de individuos
+existen, lo cual no permite estabilizar la población con un individuo optimo.
+
+Con mayor posibilidad de mutación los individuos varían más y suelen romper con
+mayor frecuencia la restricción de inversión, por lo cual hay mas sustituciones
+provocando que la función no se maximice ni se estabilice.
+
+Recomendación, mayor posibilidad de cruza y mejor posibilidad de mutación.
+
+### Cabrera Lopez Oscar Emilio
 
 ## Bibliografia
 

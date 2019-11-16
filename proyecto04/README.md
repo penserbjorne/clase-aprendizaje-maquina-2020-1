@@ -14,6 +14,9 @@ función, el alumno conocerá los efectos de la tasa de cruza y mutación.
 
 ## Desarrollo
 
+random
+matplotlib
+
 ## Resultados
 
 - Grafica del comportamiento de la media de la población en cada generación.
